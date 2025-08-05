@@ -1,62 +1,94 @@
 #include <stdio.h>
 
-#define LINHAS 10
-#define COLUNAS 10
+#define TAMANHO 10
+#define OCUPADO 3
+#define VAZIO 0
 
 int main() {
-    // Tabuleiro (apenas para contexto, não é estritamente necessário para imprimir coordenadas)
-    char tabuleiro[LINHAS][COLUNAS];
-    
-    // Inicializa o tabuleiro com '~' representando água
-    for (int i = 0; i < LINHAS; i++) {
-        for (int j = 0; j < COLUNAS; j++) {
-            tabuleiro[i][j] = '~';
+    // Tabuleiro 10x10 inicializado com zeros (posições livres)
+    int tabuleiro[TAMANHO][TAMANHO];
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = VAZIO;
         }
     }
 
-    // --- Configuração dos navios ---
-    // Navio 1: vertical de tamanho 4, começando na posição (linha=2, coluna=3)
-    int navio1_inicio_linha = 2; // índice 0-based
-    int navio1_inicio_coluna = 3;
-    int navio1_tamanho = 4; // vertical
+    // --- Posicionamento dos navios ---
 
-    // Marca o navio vertical no "tabuleiro"
-    for (int k = 0; k < navio1_tamanho; k++) {
-        tabuleiro[navio1_inicio_linha + k][navio1_inicio_coluna] = 'V'; // V de vertical
+    // Navio 1: vertical, tamanho 4, início em (1,2)
+    int nav1_linha = 1;
+    int nav1_coluna = 2;
+    int nav1_tamanho = 4;
+    for (int k = 0; k < nav1_tamanho; k++) {
+        tabuleiro[nav1_linha + k][nav1_coluna] = OCUPADO;
     }
 
-    // Navio 2: horizontal de tamanho 5, começando na posição (linha=5, coluna=1)
-    int navio2_inicio_linha = 5;
-    int navio2_inicio_coluna = 1;
-    int navio2_tamanho = 5; // horizontal
-
-    // Marca o navio horizontal no "tabuleiro"
-    for (int k = 0; k < navio2_tamanho; k++) {
-        tabuleiro[navio2_inicio_linha][navio2_inicio_coluna + k] = 'H'; // H de horizontal
+    // Navio 2: horizontal, tamanho 5, início em (5,1)
+    int nav2_linha = 5;
+    int nav2_coluna = 1;
+    int nav2_tamanho = 5;
+    for (int k = 0; k < nav2_tamanho; k++) {
+        tabuleiro[nav2_linha][nav2_coluna + k] = OCUPADO;
     }
 
-    // --- Exibição das coordenadas dos navios ---
-    printf("Posicionamento dos navios no tabuleiro (índices 0-based):\n\n");
-
-    // Navio vertical
-    printf("Navio 1 (Vertical) - tamanho %d, iniciando em (%d, %d):\n",
-           navio1_tamanho, navio1_inicio_linha, navio1_inicio_coluna);
-    for (int k = 0; k < navio1_tamanho; k++) {
-        int linha_atual = navio1_inicio_linha + k;
-        int coluna_atual = navio1_inicio_coluna;
-        printf("  Parte %d: (%d, %d)\n", k + 1, linha_atual, coluna_atual);
+    // Navio 3: diagonal descendo para a direita, tamanho 4, início em (0,0)
+    int nav3_inicio_linha = 0;
+    int nav3_inicio_coluna = 0;
+    int nav3_tamanho = 4;
+    for (int k = 0; k < nav3_tamanho; k++) {
+        tabuleiro[nav3_inicio_linha + k][nav3_inicio_coluna + k] = OCUPADO;
     }
-    printf("\n");
 
-    // Navio horizontal
-    printf("Navio 2 (Horizontal) - tamanho %d, iniciando em (%d, %d):\n",
-           navio2_tamanho, navio2_inicio_linha, navio2_inicio_coluna);
-    for (int k = 0; k < navio2_tamanho; k++) {
-        int linha_atual = navio2_inicio_linha;
-        int coluna_atual = navio2_inicio_coluna + k;
-        printf("  Parte %d: (%d, %d)\n", k + 1, linha_atual, coluna_atual);
+    // Navio 4: diagonal subindo para a direita, tamanho 3, início em (9,2)
+    int nav4_inicio_linha = 9;
+    int nav4_inicio_coluna = 2;
+    int nav4_tamanho = 3;
+    for (int k = 0; k < nav4_tamanho; k++) {
+        tabuleiro[nav4_inicio_linha - k][nav4_inicio_coluna + k] = OCUPADO;
+    }
+
+    // --- Exibição do tabuleiro completo ---
+    printf("Tabuleiro 10x10 (0 = livre, 3 = ocupado):\n");
+    printf("   "); // espaçamento para cabeçalho de colunas
+    for (int c = 0; c < TAMANHO; c++) {
+        printf("%2d ", c);
     }
     printf("\n");
+
+    for (int i = 0; i < TAMANHO; i++) {
+        printf("%2d ", i); // índice da linha
+        for (int j = 0; j < TAMANHO; j++) {
+            printf(" %d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    // --- Exibição detalhada das coordenadas de cada navio ---
+    printf("\nCoordenadas dos navios:\n");
+
+    // Navio 1 (vertical)
+    printf("Navio 1 (Vertical) tamanho %d, início em (%d, %d):\n", nav1_tamanho, nav1_linha, nav1_coluna);
+    for (int k = 0; k < nav1_tamanho; k++) {
+        printf("  Parte %d: (%d, %d)\n", k + 1, nav1_linha + k, nav1_coluna);
+    }
+
+    // Navio 2 (horizontal)
+    printf("Navio 2 (Horizontal) tamanho %d, início em (%d, %d):\n", nav2_tamanho, nav2_linha, nav2_coluna);
+    for (int k = 0; k < nav2_tamanho; k++) {
+        printf("  Parte %d: (%d, %d)\n", k + 1, nav2_linha, nav2_coluna + k);
+    }
+
+    // Navio 3 (diagonal descendo-direita)
+    printf("Navio 3 (Diagonal descendo-direita) tamanho %d, início em (%d, %d):\n", nav3_tamanho, nav3_inicio_linha, nav3_inicio_coluna);
+    for (int k = 0; k < nav3_tamanho; k++) {
+        printf("  Parte %d: (%d, %d)\n", k + 1, nav3_inicio_linha + k, nav3_inicio_coluna + k);
+    }
+
+    // Navio 4 (diagonal subindo-direita)
+    printf("Navio 4 (Diagonal subindo-direita) tamanho %d, início em (%d, %d):\n", nav4_tamanho, nav4_inicio_linha, nav4_inicio_coluna);
+    for (int k = 0; k < nav4_tamanho; k++) {
+        printf("  Parte %d: (%d, %d)\n", k + 1, nav4_inicio_linha - k, nav4_inicio_coluna + k);
+    }
 
     return 0;
 }
